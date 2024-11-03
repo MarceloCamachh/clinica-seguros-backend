@@ -1,0 +1,36 @@
+POST {{host}}/appointments
+authorization: Basic {{doctorUserEmail}} {{password}}
+Content-Type: application/json
+
+{
+  "date": "2024-04-05T13:00:00.000Z",
+  "status": "BOOKED",
+  "description": "bbbb",
+  "patientId": "660edfad5fb57f06c7e4d610",
+  "doctorId": "660edfa85fb57f06c7e4d5c6",
+  "examinationId": "660edfb15fb57f06c7e4d645"
+}
+
+###
+PUT {{host}}/appointments/660d9d9dac52f002a758b569
+authorization: Basic {{doctorUserEmail}} {{password}}
+Content-Type: application/json
+
+{
+  "date": "2025-10-01T10:00:00.000Z",
+  "status": "BOOKED",
+  "description": "CheckupUpdated2",
+  "patientId": "660d506b5f12b209dcdd18af",
+  "doctorId": "660d50685f12b209dcdd1875",
+  "examinationId": "660d50715f12b209dcdd18ff"
+}
+
+###
+GET {{host}}/appointments/doctors/664daa1c44939b624d0e65a9
+authorization: Basic {{doctorUserEmail}} {{password}}
+Content-Type: application/json
+
+###
+GET {{host}}/appointments/patients/660d506b5f12b209dcdd18af
+authorization: Basic {{patientUserEmail}} {{password}}
+Content-Type: application/json

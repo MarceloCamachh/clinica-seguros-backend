@@ -1,0 +1,54 @@
+POST {{host}}/registration
+authorization: Basic {{adminUserEmail}} {{password}}
+Content-Type: application/json
+
+{
+  "name": "test",
+  "surname": "test",
+  "password": "Password1234!",
+  "email": "teswsaassst@gmail.com",
+  "phoneNumber": "1234567890",
+  "pesel": "12345678901",
+  "address": {
+    "city": "Gliwice",
+    "street": "Zwycistwa",
+    "postalCode": "12-345",
+    "houseNumber": "1",
+    "apartmentNumber": "1",
+    "country": "Poland"
+  },
+  "role": "ROLE_ADMIN"
+}
+
+###
+PUT {{host}}/users/65f9c32d6702b512ac5cecd0
+authorization: Basic {{adminUserEmail}} {{password}}
+Content-Type: application/json
+
+{
+  "name": "test",
+  "surname": "test",
+  "password": "Password1234!",
+  "email": "doctor@doctor.com",
+  "phoneNumber": "1234567890",
+  "pesel": "12345678901",
+  "address": {
+    "city": "Gliwice",
+    "street": "Zwycistwa",
+    "postalCode": "12-345",
+    "houseNumber": "1",
+    "apartmentNumber": "1",
+    "country": "Poland"
+  },
+  "role": "ROLE_ADMIN"
+}
+
+###
+GET {{host}}/users
+authorization: Basic {{adminUserEmail}} {{password}}
+Content-Type: application/json
+
+###
+GET {{host}}/users/paged?roles=ROLE_DOCTOR
+authorization: Basic {{patientUserEmail}} {{password}}
+Content-Type: application/json

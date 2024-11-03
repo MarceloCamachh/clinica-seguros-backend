@@ -1,0 +1,90 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam wrapWidth 250
+skinparam maxMessageSize 250
+
+class User {
+    String id
+    String name
+    String surname
+    String email
+    String password
+    UserRole userRole
+    boolean isEnabled
+    String phoneNumber
+    String pesel
+    Address address
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+    LocalDateTime lastLogin
+    DoctorDetails doctorDetails
+}
+
+class Address {
+    String country
+    String city
+    String street
+    String postalCode
+    String houseNumber
+    String apartmentNumber
+}
+
+class DoctorDetails {
+    String specialization
+    String education
+    String description
+    Schedule schedule
+    List<Examination> examinations
+}
+
+class Schedule {
+    Map<DayOfWeek, DailySchedule> dailySchedules
+}
+
+class DailySchedule {
+    LocalTime startTime
+    LocalTime endTime
+}
+
+class Examination {
+    String id
+    String name
+    String description
+    double price
+    int duration
+    ExaminationStatus status
+    List<User> doctors
+}
+
+class Appointment {
+    String id
+    LocalDateTime creationDate
+    LocalDateTime lastUpdateDate
+    LocalDateTime date
+    AppointmentStatus status
+    String description
+    List<Medicine> medicines
+    User doctor
+    User patient
+    Examination examination
+}
+
+class Medicine {
+    String name
+    String quantity
+    String numberOfDays
+    String dosage
+}
+
+' Relationships
+User "1" -left- "1" Address : has
+User "1" --> "1" DoctorDetails : may have
+DoctorDetails "1" --> "1" Schedule : has a
+Schedule "1" --> "1..7" DailySchedule : contains
+DoctorDetails "0..*" --> "0..*" Examination : involved in
+Appointment "1" -left- "1" User : scheduled with
+Appointment "1" --> "1" User : scheduled for
+Appointment "1" --> "1" Examination : includes
+Appointment "1" --> "0..*" Medicine : prescribes
+Examination "0..*" --> "0..*" User : performs
+@enduml

@@ -1,0 +1,184 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam wrapWidth 300
+skinparam maxMessageSize 300
+
+class User {
+    String id
+    String name
+    String surname
+    String email
+    String password
+    UserRole userRole
+    boolean isEnabled
+    String phoneNumber
+    String pesel
+    Address address
+    LocalDateTime createdAt
+    LocalDateTime updatedAt
+    LocalDateTime lastLogin
+    DoctorDetails doctorDetails
+    + Collection<? extends GrantedAuthority> getAuthorities()
+    + String getUsername()
+    + boolean isAccountNonExpired()
+    + boolean isAccountNonLocked()
+    + boolean isCredentialsNonExpired()
+    + boolean isEnabled()
+}
+
+class Address {
+    String country
+    String city
+    String street
+    String postalCode
+    String houseNumber
+    String apartmentNumber
+}
+
+class DoctorDetails {
+    String specialization
+    String education
+    String description
+    Schedule schedule
+    List<Examination> examinations
+}
+
+class Schedule {
+    Map<DayOfWeek, DailySchedule> dailySchedules
+}
+
+class DailySchedule {
+    LocalTime startTime
+    LocalTime endTime
+}
+
+class Examination {
+    String id
+    String name
+    String description
+    double price
+    int duration
+    ExaminationStatus status
+    List<User> doctors
+}
+
+class Appointment {
+    String id
+    LocalDateTime creationDate
+    LocalDateTime lastUpdateDate
+    LocalDateTime date
+    AppointmentStatus status
+    String description
+    List<Medicine> medicines
+    User doctor
+    User patient
+    Examination examination
+}
+
+class Medicine {
+    String name
+    String quantity
+    String numberOfDays
+    String dosage
+}
+
+class UserRepository {
+    + Optional<User> findByEmail(String username)
+    + List<User> findAllByUserRole(UserRole userRole)
+}
+
+class UserService {
+    + List<User> getAllUsers()
+    + Optional<User> createUpdateUser(String userId, CreateUpdateUserDTO createUpdateUserDTO)
+    + Page<User> getPagedUsers(UserRequestParams userRequestParams)
+    + Optional<User> findByEmail(String email)
+    + void save(User user)
+    + Optional<User> findById(String userId)
+    + Optional<User> disableUser(String userId)
+}
+
+class UserController {
+    + ResponseEntity<UserDTO> getUserById(String userId)
+    + ResponseEntity<List<UserDTO>> getAllUsers()
+    + ResponseEntity<Page<UserDTO>> getPagedUsers(String sortField, Sort.Direction sortDirection, Integer pageSize, Integer pageNum, String search, boolean showDisabled, List<UserRole> roles)
+    + ResponseEntity<UserDTO> updateUser(String userId, CreateUpdateUserDTO createUpdateUserDTO)
+    + ResponseEntity<UserDTO> createUser(CreateUpdateUserDTO createUpdateUserDTO)
+    + ResponseEntity<UserDTO> disableUser(String userId)
+}
+
+interface DoctorService {
+    + List<LocalDateTime> getAvailableAppointments(String doctorId, String examinationId, LocalDateTime date)
+    + Page<User> getPagedDoctors(UserRequestParams doctorRequestParams)
+    + Optional<User> getDoctorByEmail(String email)
+}
+
+class DoctorController {
+    + ResponseEntity<DoctorDTO> getDoctorByEmail(String email)
+    + ResponseEntity<List<AvailableAppointmentsDTO>> getAvailableAppointments(String id, String examinationId, LocalDateTime date)
+    + ResponseEntity<Page<DoctorDTO>> getPagedDoctors(String sortField, Sort.Direction sortDirection, Integer pageSize, Integer pageNum, String search)
+}
+
+interface ExaminationService {
+    + Page<Examination> getPagedExaminations(ExaminationRequestParams examinationRequestParams)
+    + Optional<Examination> createUpdateExamination(String id, CreateUpdateExaminationDTO examinationDTO)
+    + List<Examination> getDoctorsExaminations(ObjectId doctorId)
+}
+
+class ExaminationController {
+    + ResponseEntity<List<ExaminationDTO>> getDoctorsExaminations(ObjectId doctorId)
+    + ResponseEntity<Page<ExaminationDTO>> getPagedExaminations(String sortField, Sort.Direction sortDirection, Integer pageSize, Integer pageNum, String search, List<ObjectId> doctorIds)
+    + ResponseEntity<ExaminationDTO> create(CreateUpdateExaminationDTO examinationDTO)
+    + ResponseEntity<ExaminationDTO> update(String id, CreateUpdateExaminationDTO examinationDTO)
+}
+
+class ExaminationRepository {
+}
+
+interface AppointmentService {
+    + Optional<Appointment> createUpdateAppointment(String id, CreateUpdateAppointmentDTO createUpdateAppointmentDTO)
+    + Optional<Appointment> findById(String id)
+    + Page<Appointment> findAllDoctorsAppointments(String doctorId, AppointmentRequestParams appointmentRequestParams)
+    + Page<Appointment> findAllPatientsAppointments(String patientId, AppointmentRequestParams patientAppointmentRequestParams)
+}
+
+class AppointmentController {
+    + ResponseEntity<AppointmentDTO> getAppointment(String id)
+    + ResponseEntity<Page<AppointmentDTO>> getPagedDoctorsAppointments(String id, String sortField, Sort.Direction sortDirection, Integer pageSize, Integer pageNum, AppointmentStatus status, LocalDateTime startDate, LocalDateTime endDate)
+    + ResponseEntity<Page<AppointmentDTO>> getPagedPatientAppointments(String id, String sortField, Sort.Direction sortDirection, Integer pageSize, Integer pageNum, AppointmentStatus status, LocalDateTime startDate, LocalDateTime endDate)
+    + ResponseEntity<AppointmentDTO> updateAppointment(String id, CreateUpdateAppointmentDTO createUpdateAppointmentDTO)
+    + ResponseEntity<AppointmentDTO> createAppointment(CreateUpdateAppointmentDTO createUpdateAppointmentDTO)
+}
+
+class AppointmentRepository {
+    + List<Appointment> findByDoctorAndDateBetweenAndStatus(User user, LocalDateTime startDate, LocalDateTime endDate, AppointmentStatus status)
+    + Optional<Appointment> findByDoctorAndDateAndStatus(User user, LocalDateTime date, AppointmentStatus status)
+}
+
+' Relationships
+User "1" -left- "1" Address : has
+User "1" --> "0..1" DoctorDetails : has
+DoctorDetails "1" --> "1" Schedule : has a
+Schedule "1" -left--> "1..7" DailySchedule : contains
+DoctorDetails "0..*" --> "0..*" Examination : uses
+Examination "0..*" --> "0..*" User : performs
+Appointment "1" -up- "0..*" Medicine : prescribes
+Appointment "1" -- "1" User : scheduled with
+Appointment "1" --> "1" User : scheduled for
+Appointment "1" --> "1" Examination : includes
+
+UserService --> UserRepository : uses
+UserService --> User : manages
+UserController -up--> UserService : uses
+
+DoctorService --> User : manages
+DoctorController --> DoctorService : uses
+
+ExaminationService --> ExaminationRepository : uses
+ExaminationService --> Examination : manages
+ExaminationController --> ExaminationService : uses
+
+AppointmentService --> AppointmentRepository : uses
+AppointmentService --> Appointment : manages
+AppointmentController -right--> AppointmentService : uses
+
+@enduml

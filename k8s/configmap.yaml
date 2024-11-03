@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clinic-configmap
+  namespace: clinic-system
+data:
+  SPRING_APPLICATION_NAME: "Clinic System"
+  SPRING_DATA_MONGODB_HOST: "mongodb"
+  SPRING_DATA_MONGODB_PORT: "27017"
+  SPRING_DATA_MONGODB_DATABASE: "clinicsystem"
+  SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: "admin"
+  SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: "true"
+  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_MONGODB_CORE_MONGOTEMPLATE: "DEBUG"
+  ANGULAR_APP_URL: "http://angular.clinic.system.com"
+  REACT_APP_URL: "http://react.clinic.system.com"
+  VUE_APP_URL: "http://vue.clinic.system.com"
