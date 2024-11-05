@@ -5,8 +5,8 @@ metadata:
   namespace: clinic-system
 data:
   SPRING_APPLICATION_NAME: "Clinic System"
-  SPRING_DATA_MONGODB_HOST: "mongodb.railway.internal"
-  SPRING_DATA_MONGODB_PORT: "27017"
+  SPRING_DATA_MONGODB_HOST: "autorack.proxy.rlwy.net"
+  SPRING_DATA_MONGODB_PORT: "17384"
   SPRING_DATA_MONGODB_DATABASE: "clinicsystem"
   SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: "admin"
   SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: "true"
