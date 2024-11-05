@@ -5,7 +5,7 @@ metadata:
   namespace: clinic-system
 data:
   SPRING_APPLICATION_NAME: "Clinic System"
-  SPRING_DATA_MONGODB_HOST: "mongodb"
+  SPRING_DATA_MONGODB_HOST: "mongodb.railway.internal"
   SPRING_DATA_MONGODB_PORT: "27017"
   SPRING_DATA_MONGODB_DATABASE: "clinicsystem"
   SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: "admin"
@@ -14,3 +14,5 @@ data:
   ANGULAR_APP_URL: "http://angular.clinic.system.com"
   REACT_APP_URL: "http://react.clinic.system.com"
   VUE_APP_URL: "http://vue.clinic.system.com"
+SPRING_DATA_MONGODB_USERNAME: "mongo"  # Usuario de MongoDB en Railway
+  SPRING_DATA_MONGODB_PASSWORD: "rZisgfykxOcNPuwqJXcVwBxjepNSTMBS" 
