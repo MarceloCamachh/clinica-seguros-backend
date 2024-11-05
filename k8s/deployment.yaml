@@ -32,7 +32,7 @@ spec:
               memory: 512Mi
           imagePullPolicy: Never
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           envFrom:
             - configMapRef:
                 name: clinic-configmap
