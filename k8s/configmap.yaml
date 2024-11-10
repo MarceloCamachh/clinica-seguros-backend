@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clinic-configmap
+  namespace: clinic-system
+data:
+  SPRING_APPLICATION_NAME: "Clinic System"
+  SPRING_DATA_MONGODB_HOST: "autorack.proxy.rlwy.net"
+  SPRING_DATA_MONGODB_PORT: "17384"
+  SPRING_DATA_MONGODB_DATABASE: "clinicsystem"
+  SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: "admin"
+  SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: "true"
+  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_MONGODB_CORE_MONGOTEMPLATE: "DEBUG"
+  ANGULAR_APP_URL: "https://clinica-angular-copia.vercel.app"
+  REACT_APP_URL: "https://clinica-angular-copia.vercel.app"
+  VUE_APP_URL: "http://vue.clinic.system.com"
+SPRING_DATA_MONGODB_USERNAME: "mongo"  # Usuario de MongoDB en Railway
+  SPRING_DATA_MONGODB_PASSWORD: "rZisgfykxOcNPuwqJXcVwBxjepNSTMBS" 

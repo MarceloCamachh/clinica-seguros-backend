@@ -1,0 +1,3 @@
+POST {{host}}/auth/login
+authorization: Basic {{doctorUserEmail}} {{password}}
+Content-Type: application/json

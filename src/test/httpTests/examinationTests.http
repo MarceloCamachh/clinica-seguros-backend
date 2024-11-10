@@ -1,0 +1,41 @@
+###
+GET {{host}}/examinations/paged?doctor-ids=66048dfe8697ed35cb68b2d1
+authorization: Basic {{patientUserEmail}} {{password}}
+Content-Type: application/json
+
+###
+GET {{host}}/doctors/6604a4a884cfb6230d0ee0d5/examinations
+authorization: Basic {{patientUserEmail}} {{password}}
+Content-Type: application/json
+
+
+###
+POST {{host}}/examinations
+authorization: Basic {{adminUserEmail}} {{password}}
+Content-Type: application/json
+
+{
+  "name": "examinationName11111",
+  "description": "examinationDescription",
+  "price": 100,
+  "duration": 30,
+  "status": "AVAILABLE",
+  "doctorIds": [
+    "66048dfe8697ed35cb68b2d1"
+  ]
+}
+
+###
+PUT {{host}}/examinations/6605bfa33abed3763ed3a94c
+authorization: Basic {{adminUserEmail}} {{password}}
+Content-Type: application/json
+
+{
+  "name": "examinationName34",
+  "description": "examinationDescription",
+  "price": 100,
+  "duration": 30,
+  "status": "AVAILABLE",
+  "doctorIds": [
+  ]
+}

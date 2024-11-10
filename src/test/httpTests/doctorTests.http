@@ -1,0 +1,8 @@
+###
+GET {{host}}/doctors/660edfa85fb57f06c7e4d5c6/examinations/660edfb15fb57f06c7e4d645/available-appointments/date/2024-04-05T23:59
+authorization: Basic {{doctorUserEmail}} {{password}}
+Content-Type: application/json
+
+###
+GET {{host}}/doctors/paged
+Content-Type: application/json

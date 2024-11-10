@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinicbackend-deploy
+  namespace: clinic-system
+  labels:
+    app: clinicbackend
+spec:
+  selector:
+    matchLabels:
+      app: clinicbackend
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: clinicbackend
+    spec:
+      containers:
+        - name: clinicbackend
+          image: clinic-system-backend:0.0.1
+          resources:
+            requests:
+              cpu: '1'
+              memory: 256Mi
+            limits:
+              cpu: '1'
+              memory: 512Mi
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: clinic-configmap
+          env:
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-creds
+                  key: username
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-creds
+                  key: password
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clinicbackend
+  namespace: clinic-system
+  labels:
+    name: clinicbackend-deploy
+spec:
+  selector:
+    app: clinicbackend
+  type: ClusterIP
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clinicbackend-ingress
+  namespace: clinic-system
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "server.clinic.system.com"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: clinicbackend
+                port:
+                  number: 8080
