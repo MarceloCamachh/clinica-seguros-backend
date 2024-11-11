@@ -35,7 +35,7 @@ public class DoctorSchedule {
     private ScheduleType scheduleType;
     
     // Para programación recurrente
-    private DayOfWeek dayOfWeek;
+    private DayOfWeek dayOfWeek = null;
     
     // Para programación diaria específica
     private LocalDate specificDate;
