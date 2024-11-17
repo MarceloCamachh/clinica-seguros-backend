@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.marek_kawalski.clinic_system.medical_record.domain.MedicalRecord;
 @Getter
 @Setter
 @Builder
@@ -59,6 +61,10 @@ public class User implements UserDetails {
 
     // Role specific fields
     private DoctorDetails doctorDetails;
+
+    // Referencia al historial médico
+    @DocumentReference(lazy = true)
+    private MedicalRecord medicalRecord;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

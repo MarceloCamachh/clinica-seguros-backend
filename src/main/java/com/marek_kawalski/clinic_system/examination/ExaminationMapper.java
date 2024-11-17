@@ -6,13 +6,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExaminationMapper {
     public ExaminationDTO mapExaminationToExaminationDTO(final Examination examination) {
-        return new ExaminationDTO(
-                examination.getId(),
-                examination.getName(),
-                examination.getDescription(),
-                examination.getPrice(),
-                examination.getDuration(),
-                examination.getStatus()
-        );
+        return ExaminationDTO.builder()
+                .id(examination.getId())
+                .name(examination.getName())
+                .description(examination.getDescription())
+                .price(examination.getPrice())
+                .duration(examination.getDuration())
+                .status(examination.getStatus())
+                .createdAt(examination.getCreatedAt())
+                .updatedAt(examination.getUpdatedAt())
+                .createdBy(examination.getCreatedBy())
+                .updatedBy(examination.getUpdatedBy())
+                .isActive(examination.isActive())
+                .build();
     }
 }

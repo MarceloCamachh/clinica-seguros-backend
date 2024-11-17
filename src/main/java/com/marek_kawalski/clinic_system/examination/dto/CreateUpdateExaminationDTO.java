@@ -16,6 +16,9 @@ public record CreateUpdateExaminationDTO(
         int duration,
 
         ExaminationStatus status,
-        List<String> doctorIds
+        List<String> doctorIds,
+        String patientId,
+        String createdBy,
+        String updatedBy
 ) {
 }

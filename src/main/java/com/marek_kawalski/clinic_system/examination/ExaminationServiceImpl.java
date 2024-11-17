@@ -3,20 +3,26 @@ package com.marek_kawalski.clinic_system.examination;
 import com.marek_kawalski.clinic_system.examination.dto.CreateUpdateExaminationDTO;
 import com.marek_kawalski.clinic_system.user.User;
 import com.marek_kawalski.clinic_system.user.UserRepository;
+import com.marek_kawalski.clinic_system.medical_record.domain.MedicalRecord;
+import com.marek_kawalski.clinic_system.medical_record.repository.MedicalRecordRepository;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.marek_kawalski.clinic_system.user.exception.UserNotFoundException;
+import com.marek_kawalski.clinic_system.examination.exception.ExaminationNotFoundException;
 @Service
 @AllArgsConstructor
 public class ExaminationServiceImpl implements ExaminationService {
     private final ExaminationRepository examinationRepository;
     private final UserRepository userRepository;
+    private final MedicalRecordRepository medicalRecordRepository;
 
     @Override
     public Page<Examination> getPagedExaminations(final ExaminationRequestParams examinationRequestParams) {
@@ -28,23 +34,26 @@ public class ExaminationServiceImpl implements ExaminationService {
         Examination examination;
 
         if (id != null) {
-            examination = examinationRepository.findById(id).orElse(null);
-            if (examination == null) {
-                return Optional.empty();
-            }
+            examination = examinationRepository.findById(id)
+                .orElseThrow(() -> new ExaminationNotFoundException("Examen no encontrado"));
         } else {
             examination = new Examination();
         }
 
         updateExaminationDetails(examination, examinationDTO);
+        
+        // Guardar el examen antes de actualizar las relaciones
+        examination = examinationRepository.save(examination);
 
-        if (id == null) {
-            examination = examinationRepository.save(examination);
-        }
-
-
-        // Update doctors with the new examination
+        // Actualizar doctores con el nuevo examen
         updateDoctorsExaminations(examination, examinationDTO);
+
+        // Actualizar historial médico si hay paciente
+        if (examinationDTO.patientId() != null) {
+            User patient = userRepository.findById(examinationDTO.patientId())
+                .orElseThrow(() -> new UserNotFoundException("Paciente no encontrado"));
+            updateMedicalRecord(patient, examination);
+        }
 
         return Optional.of(examination);
     }
@@ -60,36 +69,72 @@ public class ExaminationServiceImpl implements ExaminationService {
         examination.setName(examinationDTO.name());
         examination.setPrice(examinationDTO.price());
         examination.setStatus(examinationDTO.status());
+        
+        if (examination.getCreatedAt() == null) {
+            examination.setCreatedAt(LocalDateTime.now());
+            examination.setCreatedBy(examinationDTO.createdBy());
+        }
+        
+        examination.setUpdatedAt(LocalDateTime.now());
+        examination.setUpdatedBy(examinationDTO.updatedBy());
     }
 
     private void updateDoctorsExaminations(Examination examination, CreateUpdateExaminationDTO examinationDTO) {
         List<String> doctorIds = examinationDTO.doctorIds();
-        List<User> allDoctors = userRepository.findAll();
-
-        // Remove the examination from doctors that no longer have it
-        for (User doctor : allDoctors) {
-            if (doctor.getDoctorDetails() == null) continue; // Skip users that are not doctors (e.g. patients
-            if (doctor.getDoctorDetails().getExaminations().stream().map(Examination::getId).toList().contains(examination.getId()) && !doctorIds.contains(doctor.getId())) {
-                doctor.getDoctorDetails().getExaminations().removeIf(e -> e.getId().equals(examination.getId()));
-                userRepository.save(doctor); // Save the doctor to persist the changes
-            }
+        if (doctorIds == null) {
+            doctorIds = new ArrayList<>();
         }
 
+        List<User> allDoctors = userRepository.findAll();
         List<User> tempDoctors = new ArrayList<>();
 
-        // Add the examination to new doctors
-        for (String doctorId : doctorIds) {
-            User doctor = userRepository.findById(doctorId).orElse(null);
-            if (doctor != null && !doctor.getDoctorDetails().getExaminations().stream().map(Examination::getId).toList().contains(examination.getId())) {
-                doctor.getDoctorDetails().getExaminations().add(examination);
-                userRepository.save(doctor); // Save the doctor to persist the changes
+        for (User doctor : allDoctors) {
+            if (doctor.getDoctorDetails() == null) continue;
+            
+            List<Examination> doctorExams = doctor.getDoctorDetails().getExaminations();
+            if (doctorExams == null) {
+                doctor.getDoctorDetails().setExaminations(new ArrayList<>());
+                doctorExams = doctor.getDoctorDetails().getExaminations();
+            }
+
+            boolean hasExam = doctorExams.stream()
+                .anyMatch(e -> e.getId().equals(examination.getId()));
+            boolean shouldHaveExam = doctorIds.contains(doctor.getId());
+
+            if (hasExam && !shouldHaveExam) {
+                doctorExams.removeIf(e -> e.getId().equals(examination.getId()));
+                userRepository.save(doctor);
+            } else if (!hasExam && shouldHaveExam) {
+                doctorExams.add(examination);
+                userRepository.save(doctor);
                 tempDoctors.add(doctor);
             }
         }
 
         examination.setDoctors(tempDoctors);
         examinationRepository.save(examination);
+    }
 
+    private void updateMedicalRecord(User patient, Examination examination) {
+        MedicalRecord medicalRecord = medicalRecordRepository.findByPatientId(patient.getId())
+            .orElseGet(() -> {
+                MedicalRecord newRecord = MedicalRecord.builder()
+                    .patient(patient)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+                return medicalRecordRepository.save(newRecord);
+            });
+
+        if (medicalRecord.getExaminationIds() == null) {
+            medicalRecord.setExaminationIds(new ArrayList<>());
+        }
+        
+        if (!medicalRecord.getExaminationIds().contains(examination.getId())) {
+            medicalRecord.getExaminationIds().add(examination.getId());
+            medicalRecord.setUpdatedAt(LocalDateTime.now());
+            medicalRecordRepository.save(medicalRecord);
+        }
     }
 
 }
