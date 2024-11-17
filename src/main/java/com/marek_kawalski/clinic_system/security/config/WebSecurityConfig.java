@@ -52,6 +52,8 @@ public class WebSecurityConfig {
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "examinations/**")
                         .permitAll()
+                        .requestMatchers("/send-email/**")
+                        .permitAll()
                         .requestMatchers("/schedules/**")
                         .authenticated()
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
