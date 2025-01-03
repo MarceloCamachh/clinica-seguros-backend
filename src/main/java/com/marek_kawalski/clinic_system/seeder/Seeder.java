@@ -45,44 +45,44 @@ public class Seeder {
     );
 
     static {
-        SPECIALIZATION_EXAMINATIONS.put("Cardiology", Arrays.asList(
-                "Electrocardiogram (ECG)", "Echocardiogram", "Stress Test", "Holter Monitoring"
+        SPECIALIZATION_EXAMINATIONS.put("Cardiología", Arrays.asList(
+                "Electrocardiograma (ECG)", "Ecocardiograma", "Prueba de Esfuerzo", "Monitoreo Holter"
         ));
-        SPECIALIZATION_EXAMINATIONS.put("Dermatology", Arrays.asList(
-                "Skin Biopsy", "Patch Testing", "Dermatoscopy", "Cryotherapy"
+        SPECIALIZATION_EXAMINATIONS.put("Dermatología", Arrays.asList(
+                "Biopsia de Piel", "Prueba de Parche", "Dermatoscopía", "Crioterapia"
         ));
-        SPECIALIZATION_EXAMINATIONS.put("Neurology", Arrays.asList(
-                "Electroencephalogram (EEG)", "MRI of the Brain", "Nerve Conduction Study", "Lumbar Puncture"
+        SPECIALIZATION_EXAMINATIONS.put("Neurología", Arrays.asList(
+                "Electroencefalograma (EEG)", "Resonancia Magnética del Cerebro", "Estudio de Conducción Nerviosa", "Punción Lumbar"
         ));
-        SPECIALIZATION_EXAMINATIONS.put("Orthopedics", Arrays.asList(
-                "X-ray", "MRI of Joints", "Bone Density Scan", "Arthroscopy"
+        SPECIALIZATION_EXAMINATIONS.put("Ortopedia", Arrays.asList(
+                "Rayos X", "Resonancia Magnética de Articulaciones", "Densitometría Ósea", "Artroscopía"
         ));
-        SPECIALIZATION_EXAMINATIONS.put("Gastroenterology", Arrays.asList(
-                "Endoscopy", "Colonoscopy", "Liver Function Test", "Abdominal Ultrasound"
+        SPECIALIZATION_EXAMINATIONS.put("Gastroenterología", Arrays.asList(
+                "Endoscopía", "Colonoscopía", "Prueba de Función Hepática", "Ecografía Abdominal"
         ));
 
-        EXAMINATION_SYMPTOMS.put("Electrocardiogram (ECG)", Arrays.asList(
+        EXAMINATION_SYMPTOMS.put("Electrocardiograma (ECG)", Arrays.asList(
                 "dolor en el pecho", "dificultad para respirar", "palpitaciones", "mareos"
         ));
-        EXAMINATION_SYMPTOMS.put("Echocardiogram", Arrays.asList(
+        EXAMINATION_SYMPTOMS.put("Echocardiograma", Arrays.asList(
                 "soplo cardíaco", "dolor en el pecho", "dificultad para respirar", "hinchazón en las piernas"
         ));
-        EXAMINATION_SYMPTOMS.put("Stress Test", Arrays.asList(
+        EXAMINATION_SYMPTOMS.put("Prueba de Esfuerzo", Arrays.asList(
                 "dolor en el pecho durante el ejercicio", "dificultad para respirar con actividad", "latido cardíaco irregular"
         ));
-        EXAMINATION_SYMPTOMS.put("Holter Monitoring", Arrays.asList(
+        EXAMINATION_SYMPTOMS.put("Monitoreo Holter", Arrays.asList(
                 "palpitaciones", "desmayos", "mareos", "fatiga inexplicable"
         ));
-        EXAMINATION_SYMPTOMS.put("Skin Biopsy", Arrays.asList(
+        EXAMINATION_SYMPTOMS.put("Biopsia de Piel", Arrays.asList(
                 "lunar sospechoso", "lesión en la piel", "sarpullido", "crecimiento inexplicable en la piel"
         ));
-        EXAMINATION_SYMPTOMS.put("Patch Testing", Arrays.asList(
+        EXAMINATION_SYMPTOMS.put("Prueba de Parche", Arrays.asList(
                 "erupción cutánea", "picazón", "dermatitis por contacto", "eccema"
         ));
-        EXAMINATION_SYMPTOMS.put("Dermatoscopy", Arrays.asList(
+        EXAMINATION_SYMPTOMS.put("Dermatoscopía", Arrays.asList(
                 "lunar cambiante", "decoloración de la piel", "crecimiento irregular en la piel"
         ));
-        EXAMINATION_SYMPTOMS.put("Cryotherapy", Arrays.asList(
+        EXAMINATION_SYMPTOMS.put("Crioterapia", Arrays.asList(
                 "verrugas", "acrocordones", "queratosis actínica", "queratosis seborreica"
         ));
     }
