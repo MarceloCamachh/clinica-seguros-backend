@@ -33,7 +33,7 @@ public class AppointmentController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_DOCTOR', 'ROLE_ADMIN', 'ROLE_REGISTRAR')")
+    @PreAuthorize("hasAnyRole('ROLE_DOCTOR', 'ROLE_ADMIN', 'ROLE_REGISTRAR','ROLE_PATIENT')")
     @GetMapping("/doctors/{id}")
     public ResponseEntity<Page<AppointmentDTO>> getPagedDoctorsAppointments(
             @PathVariable("id") final String id,
