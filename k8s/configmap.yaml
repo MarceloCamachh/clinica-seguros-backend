@@ -11,8 +11,8 @@ data:
   SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: "admin"
   SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: "true"
   LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_MONGODB_CORE_MONGOTEMPLATE: "DEBUG"
-  ANGULAR_APP_URL: "https://clinica-angular-copia.vercel.app"
-  REACT_APP_URL: "https://clinica-angular-copia.vercel.app"
+  ANGULAR_APP_URL: "https://clinic-flax.vercel.app"
+  REACT_APP_URL: "https://clinic-flax.vercel.app"
   VUE_APP_URL: "http://vue.clinic.system.com"
 SPRING_DATA_MONGODB_USERNAME: "mongo"  # Usuario de MongoDB en Railway
   SPRING_DATA_MONGODB_PASSWORD: "rZisgfykxOcNPuwqJXcVwBxjepNSTMBS" 
